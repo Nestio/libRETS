@@ -1597,11 +1597,11 @@ class RetsMetadata
     MetadataFilterTypeList GetAllFilterTypes(std::string filter) const;
 
 
-#if defined(SWIGJAVA) || defined(SWIGPHP)
+#if defined(SWIGJAVA) || defined(SWIGPHP) || defined(SWIGPYTHON)
     static RetsMetadata * CreateAndParse(BinaryData binaryData,
         EncodingType encoding = EncodingType::RETS_XML_DEFAULT_ENCODING,
         ExceptionErrorHandler * handler = ExceptionErrorHandler::GetInstance());
-#if defined(SWIGPHP)
+#if defined(SWIGPHP) || defined(SWIGPYTHON)
     %extend {
       static RetsMetadata * CreateMetadataFromString(std::string bytes)
       {
@@ -2331,7 +2331,10 @@ class RetsSession
             BinaryDataAPtr binaryData = self->Search_(request);
             return binaryData->AsString();
         }
-
+    }
+#endif
+#if defined(SWIGPHP) || defined(SWIGPYTHON)
+    %extend {
         std::string GetMetadataAsString()
         {
             BinaryDataAPtr binaryData = self->GetMetadata_();
